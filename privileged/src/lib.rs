@@ -6,8 +6,8 @@
 
 #[macro_use]
 extern crate alloc;
-extern crate wee_alloc;
 extern crate rlibc;
+extern crate wee_alloc;
 
 use alloc::vec::Vec;
 
@@ -16,13 +16,14 @@ static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
 #[no_mangle]
 #[lang = "panic_fmt"]
-pub extern fn panic_fmt() -> ! {
-	unsafe {
-		core::intrinsics::abort();
-	}
+pub extern "C" fn panic_fmt() -> ! {
+    unsafe {
+        core::intrinsics::abort();
+    }
 }
 
-enum Void { }
+enum Void {
+}
 
 extern "C" {
     fn debug(msg_data: *const u8, msg_len: usize);
@@ -75,9 +76,7 @@ impl Instance {
 
     fn calling() -> Instance {
         let sandbox = Sandbox::calling();
-        unsafe {
-            Instance::from_raw(&sandbox, sandbox_calling_instance())
-        }
+        unsafe { Instance::from_raw(&sandbox, sandbox_calling_instance()) }
     }
 
     fn invoke(&self, export_name: &str) {
@@ -120,9 +119,7 @@ impl Sandbox {
     }
 
     fn calling() -> Sandbox {
-        unsafe {
-            Sandbox::from_raw(sandbox_calling_sandbox())
-        }
+        unsafe { Sandbox::from_raw(sandbox_calling_sandbox()) }
     }
 
     unsafe fn from_raw(raw_idx: usize) -> Sandbox {
@@ -143,13 +140,8 @@ impl Sandbox {
     }
 
     fn instantiate(&self, filename: &str) -> Instance {
-        let instance_idx = unsafe { 
-            sandbox_instantiate(
-                self.raw_idx,
-                filename.as_ptr(),
-                filename.len(),
-            )
-        };
+        let instance_idx =
+            unsafe { sandbox_instantiate(self.raw_idx, filename.as_ptr(), filename.len()) };
         Instance {
             sandbox_idx: self.raw_idx,
             instance_idx: instance_idx,
@@ -159,17 +151,11 @@ impl Sandbox {
 
 fn print_str(remote_msg_data: *const Void, remote_msg_len: usize) {
     let calling_instance = Instance::calling();
-    let msg = calling_instance.peek_memory(
-        "memory", 
-        remote_msg_data as *const Void,
-        remote_msg_len
-    );
+    let msg =
+        calling_instance.peek_memory("memory", remote_msg_data as *const Void, remote_msg_len);
 
     unsafe {
-        debug(
-            msg.as_ptr(),
-            msg.len(),
-        );
+        debug(msg.as_ptr(), msg.len());
     }
 }
 

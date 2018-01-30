@@ -4,10 +4,10 @@
 
 #[no_mangle]
 #[lang = "panic_fmt"]
-pub extern fn panic_fmt() -> ! {
-	unsafe {
-		core::intrinsics::abort();
-	}
+pub extern "C" fn panic_fmt() -> ! {
+    unsafe {
+        core::intrinsics::abort();
+    }
 }
 
 extern "C" {
@@ -16,10 +16,7 @@ extern "C" {
 
 fn print(msg: &str) {
     unsafe {
-        print_str(
-            msg.as_ptr(),
-            msg.len(),
-        );
+        print_str(msg.as_ptr(), msg.len());
     }
 }
 
