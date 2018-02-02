@@ -18,145 +18,6 @@
   (import "env" "sandbox_new" (func $sandbox_new (type 3)))
   (import "env" "sandbox_peek_mem" (func $sandbox_peek_mem (type 6)))
   (import "env" "sandbox_register_func" (func $sandbox_register_func (type 7)))
-  (func $memcpy (type 4) (param i32 i32 i32) (result i32)
-    (local i32)
-    (set_local 3
-      (i32.const 0))
-    (block  ;; label = @1
-      (loop  ;; label = @2
-        (br_if 1 (;@1;)
-          (i32.eq
-            (get_local 2)
-            (get_local 3)))
-        (i32.store8
-          (i32.add
-            (get_local 0)
-            (get_local 3))
-          (i32.load8_u
-            (i32.add
-              (get_local 1)
-              (get_local 3))))
-        (set_local 3
-          (i32.add
-            (get_local 3)
-            (i32.const 1)))
-        (br 0 (;@2;)))
-      (unreachable))
-    (get_local 0))
-  (func $memmove (type 4) (param i32 i32 i32) (result i32)
-    (local i32)
-    (block  ;; label = @1
-      (block  ;; label = @2
-        (br_if 0 (;@2;)
-          (i32.ge_u
-            (get_local 1)
-            (get_local 0)))
-        (loop  ;; label = @3
-          (br_if 2 (;@1;)
-            (i32.eqz
-              (get_local 2)))
-          (i32.store8
-            (i32.add
-              (i32.add
-                (get_local 0)
-                (get_local 2))
-              (i32.const -1))
-            (i32.load8_u
-              (i32.add
-                (i32.add
-                  (get_local 1)
-                  (get_local 2))
-                (i32.const -1))))
-          (set_local 2
-            (i32.add
-              (get_local 2)
-              (i32.const -1)))
-          (br 0 (;@3;)))
-        (unreachable))
-      (set_local 3
-        (get_local 0))
-      (loop  ;; label = @4
-        (br_if 1 (;@3;)
-          (i32.eqz
-            (get_local 2)))
-        (i32.store8
-          (get_local 3)
-          (i32.load8_u
-            (get_local 1)))
-        (set_local 2
-          (i32.add
-            (get_local 2)
-            (i32.const -1)))
-        (set_local 1
-          (i32.add
-            (get_local 1)
-            (i32.const 1)))
-        (set_local 3
-          (i32.add
-            (get_local 3)
-            (i32.const 1)))
-        (br 0 (;@4;)))
-      (unreachable))
-    (get_local 0))
-  (func $memset (type 4) (param i32 i32 i32) (result i32)
-    (local i32)
-    (set_local 3
-      (i32.const 0))
-    (block  ;; label = @1
-      (loop  ;; label = @2
-        (br_if 1 (;@1;)
-          (i32.eq
-            (get_local 2)
-            (get_local 3)))
-        (i32.store8
-          (i32.add
-            (get_local 0)
-            (get_local 3))
-          (get_local 1))
-        (set_local 3
-          (i32.add
-            (get_local 3)
-            (i32.const 1)))
-        (br 0 (;@2;)))
-      (unreachable))
-    (get_local 0))
-  (func $memcmp (type 4) (param i32 i32 i32) (result i32)
-    (local i32 i32 i32 i32)
-    (set_local 6
-      (i32.const 0))
-    (set_local 5
-      (i32.const 0))
-    (block  ;; label = @1
-      (loop  ;; label = @2
-        (br_if 1 (;@1;)
-          (i32.ge_u
-            (get_local 5)
-            (get_local 2)))
-        (set_local 3
-          (i32.add
-            (get_local 1)
-            (get_local 5)))
-        (set_local 4
-          (i32.add
-            (get_local 0)
-            (get_local 5)))
-        (set_local 5
-          (i32.add
-            (get_local 5)
-            (i32.const 1)))
-        (br_if 0 (;@2;)
-          (i32.eq
-            (tee_local 4
-              (i32.load8_u
-                (get_local 4)))
-            (tee_local 3
-              (i32.load8_u
-                (get_local 3))))))
-      (set_local 6
-        (i32.sub
-          (get_local 4)
-          (get_local 3))))
-    (get_local 6))
   (func $_ZN70_$LT$wee_alloc..LargeAllocPolicy$u20$as$u20$wee_alloc..AllocPolicy$GT$22new_cell_for_free_list17h845b11d78413200aE (type 0) (param i32 i32 i32)
     (local i32 i32)
     (set_local 4
@@ -516,6 +377,145 @@
   (func $_ZN4core3ptr13drop_in_place17h075f9de043c465dbE.17 (type 9) (param i32))
   (func $_ZN102_$LT$wee_alloc..size_classes..SizeClassAllocPolicy$LT$$u27$a$GT$$u20$as$u20$wee_alloc..AllocPolicy$GT$13min_cell_size17h1bf855028006d072E (type 1) (param i32 i32) (result i32)
     (get_local 1))
+  (func $memcpy (type 4) (param i32 i32 i32) (result i32)
+    (local i32)
+    (set_local 3
+      (i32.const 0))
+    (block  ;; label = @1
+      (loop  ;; label = @2
+        (br_if 1 (;@1;)
+          (i32.eq
+            (get_local 2)
+            (get_local 3)))
+        (i32.store8
+          (i32.add
+            (get_local 0)
+            (get_local 3))
+          (i32.load8_u
+            (i32.add
+              (get_local 1)
+              (get_local 3))))
+        (set_local 3
+          (i32.add
+            (get_local 3)
+            (i32.const 1)))
+        (br 0 (;@2;)))
+      (unreachable))
+    (get_local 0))
+  (func $memmove (type 4) (param i32 i32 i32) (result i32)
+    (local i32)
+    (block  ;; label = @1
+      (block  ;; label = @2
+        (br_if 0 (;@2;)
+          (i32.ge_u
+            (get_local 1)
+            (get_local 0)))
+        (loop  ;; label = @3
+          (br_if 2 (;@1;)
+            (i32.eqz
+              (get_local 2)))
+          (i32.store8
+            (i32.add
+              (i32.add
+                (get_local 0)
+                (get_local 2))
+              (i32.const -1))
+            (i32.load8_u
+              (i32.add
+                (i32.add
+                  (get_local 1)
+                  (get_local 2))
+                (i32.const -1))))
+          (set_local 2
+            (i32.add
+              (get_local 2)
+              (i32.const -1)))
+          (br 0 (;@3;)))
+        (unreachable))
+      (set_local 3
+        (get_local 0))
+      (loop  ;; label = @4
+        (br_if 1 (;@3;)
+          (i32.eqz
+            (get_local 2)))
+        (i32.store8
+          (get_local 3)
+          (i32.load8_u
+            (get_local 1)))
+        (set_local 2
+          (i32.add
+            (get_local 2)
+            (i32.const -1)))
+        (set_local 1
+          (i32.add
+            (get_local 1)
+            (i32.const 1)))
+        (set_local 3
+          (i32.add
+            (get_local 3)
+            (i32.const 1)))
+        (br 0 (;@4;)))
+      (unreachable))
+    (get_local 0))
+  (func $memset (type 4) (param i32 i32 i32) (result i32)
+    (local i32)
+    (set_local 3
+      (i32.const 0))
+    (block  ;; label = @1
+      (loop  ;; label = @2
+        (br_if 1 (;@1;)
+          (i32.eq
+            (get_local 2)
+            (get_local 3)))
+        (i32.store8
+          (i32.add
+            (get_local 0)
+            (get_local 3))
+          (get_local 1))
+        (set_local 3
+          (i32.add
+            (get_local 3)
+            (i32.const 1)))
+        (br 0 (;@2;)))
+      (unreachable))
+    (get_local 0))
+  (func $memcmp (type 4) (param i32 i32 i32) (result i32)
+    (local i32 i32 i32 i32)
+    (set_local 6
+      (i32.const 0))
+    (set_local 5
+      (i32.const 0))
+    (block  ;; label = @1
+      (loop  ;; label = @2
+        (br_if 1 (;@1;)
+          (i32.ge_u
+            (get_local 5)
+            (get_local 2)))
+        (set_local 3
+          (i32.add
+            (get_local 1)
+            (get_local 5)))
+        (set_local 4
+          (i32.add
+            (get_local 0)
+            (get_local 5)))
+        (set_local 5
+          (i32.add
+            (get_local 5)
+            (i32.const 1)))
+        (br_if 0 (;@2;)
+          (i32.eq
+            (tee_local 4
+              (i32.load8_u
+                (get_local 4)))
+            (tee_local 3
+              (i32.load8_u
+                (get_local 3))))))
+      (set_local 6
+        (i32.sub
+          (get_local 4)
+          (get_local 3))))
+    (get_local 6))
   (func $_ZN4core9panicking5panic17h388b19995485ab52E (type 9) (param i32)
     (call $_ZN4core9panicking9panic_fmt17h8d2a1d48b93388a4E)
     (unreachable))

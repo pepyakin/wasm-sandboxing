@@ -8,7 +8,7 @@ rm sandboxed.wat sandboxed.wasm || true
 
 RUSTFLAGS="-g" cargo build --target=wasm32-unknown-unknown --release
 cp target/wasm32-unknown-unknown/release/sandboxed.wasm sandboxed.wasm
-~/dev/etc/wabt/wasm2wat \
+wasm2wat \
     -o sandboxed.wat \
     -f \
     target/wasm32-unknown-unknown/release/sandboxed.wasm

@@ -5,12 +5,12 @@ set -eux
 rm privileged.wat privileged.wasm || true
 
 RUSTFLAGS="-g" cargo build --target=wasm32-unknown-unknown --release
-~/dev/etc/wabt/wasm2wat \
+wasm2wat \
     -f \
     target/wasm32-unknown-unknown/release/privileged.wasm |
     sed '1 a\
 (export "table" (table 0))' > privileged.wat
-~/dev/etc/wabt/wat2wasm \
+wat2wasm \
     --debug-names \
     -o privileged.wasm \
     privileged.wat
